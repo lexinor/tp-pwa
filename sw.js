@@ -40,7 +40,7 @@ self.addEventListener('activate', event => {
 });
 // TODO: 2d - On intercepted fetch, use the strategy of your choice to respond to requests
 self.addEventListener('fetch', event => {
-    console.log('Fetch intercepted for:', event.request.url);
+    //console.log('Fetch intercepted for:', event.request.url);
     event.respondWith(caches.match(event.request)
       .then(cachedResponse => {
           if (cachedResponse) {

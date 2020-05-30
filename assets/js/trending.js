@@ -24,9 +24,15 @@ function addGIFToFavorite(event) {
     const db = window.db;
 
     // TODO: 4a - Open IndexedDB's database
-
+    db.open();
+    let jsonGif = {
+        id: gifId,
+        title: gifTitle,
+        imageUrl: gifImageUrl,
+        videoUrl: gifVideoUrl
+    }
     // TODO: 4b - Save GIF data into IndexedDB's database
-
+    db.gifs.add(jsonGif);
     // TODO: 4c - Put GIF media (image and video) into a cache named "gif-images"
 
     // Set button in 'liked' state (disable the button)
@@ -112,18 +118,27 @@ window.addEventListener("DOMContentLoaded", async function () {
         .then((response) => {            
             const gifs = response.data; // replace array by data
             const db = window.db;
-            // TODO: 4d - Open IndexedDB's database            
+            
+            // TODO: 4d - Open IndexedDB's database
+            db.open();
             // Display every GIF
             gifs.forEach(async gif => {
-                // TODO: 4e - Get GIF from IndexedDB's database, by its ID
-                // TODO: 4f - Create a boolean `isSaved` to check if the GIF was already saved
-                const isSaved = false; // replace false by the condition
-                buildGIFCard(gif, isSaved);
+                let isSaved = false;
+                // TODO: 4e - Get GIF from IndexedDB's database, by its ID                            
+                db.gifs.get(gif.id).then( (item) => {
+                    if(item){
+                        isSaved = true;
+                        buildGIFCard(gif, isSaved);
+                    }
+                    else
+                        buildGIFCard(gif, isSaved);
+                });                
             });
         })
         .catch( (err) => {
             return;
         });
+        
     } catch (e) {
         // TODO: 1h - Display a message in console in case of error
         console.log("An error has occured when retrieving gifs "+ e );

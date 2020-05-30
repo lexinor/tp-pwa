@@ -9,9 +9,9 @@ function removeGIFFromFavorite(event) {
     const db = window.db;
 
     // TODO: 6a - Open IndexedDB's database
-
+    db.open();
     // TODO: 6b - Remove GIF from local database using its ID
-
+    db.gifs.delete(gifId);
     // TODO: 6c - Remove GIF media (image and video) from cache
 
     // Remove GIF element
@@ -40,7 +40,7 @@ function buildGIFCard(gifItem) {
 
     const imageSourceElement = document.createElement('img');
     imageSourceElement.classList.add('lazyload');
-    imageSourceElement.dataset.src = gifItem.images.original.webp;
+    imageSourceElement.dataset.src = gifItem.imageUrl;
     imageSourceElement.alt = `${gifItem.title} image`;
     gifImageElement.appendChild(imageSourceElement);
 
@@ -76,6 +76,13 @@ window.addEventListener("DOMContentLoaded", async function () {
     const db = window.db;
 
     // TODO: 5a - Open IndexedDB's database
-
+    db.open();
     // TODO: 5b - Fetch saved GIFs from local database and display them (use function buildGIFCard)
+    db.gifs.toArray( (gifs) => {
+        gifs.forEach(gif => {
+            console.log(gif);
+            buildGIFCard(gif, true);        
+        });
+    });
+    
 });
