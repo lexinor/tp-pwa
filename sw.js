@@ -34,7 +34,6 @@ self.addEventListener('install', event => {
         })
     );
   });
-// TODO: 2c - On activation, remove obsolete caches
 
 self.addEventListener('activate', event => {
     console.log('Your service worker has been activated, cleaning old caches..');
