@@ -29,11 +29,12 @@ function addGIFToFavorite(event) {
 
     const gifTitle = gifElement.querySelector('div h3').textContent;
     const gifVideoUrl = gifElement.querySelector('source').src;
-    const gifImageUrl = gifElement.querySelector('img').src;
+    // const gifImageUrl = gifElement.querySelector('img').src; Ne fonctionne pas obligé de modifier cette ligne
+    const gifImageUrl = gifElement.querySelector('img').dataset.src;
     const db = window.db;
-    // TODO: 9i - Open IndexedDB's database    
+    
+    
     db.open();
-    // TODO: 9j - Save GIF data into IndexedDB's database
     let jsonGif = {
         id: gifId,
         title: gifTitle,
@@ -41,8 +42,14 @@ function addGIFToFavorite(event) {
         videoUrl: gifVideoUrl
     }
     db.gifs.add(jsonGif);
-    // TODO: 9k - Put GIF media (image and video) into a cache named "gif-images"
-
+    
+    const cacheName = "gif-images";
+    caches
+    .open(cacheName)
+    .then( cache => {
+        cache.add(gifVideoUrl);
+        cache.add(gifImageUrl);
+    })
     // Set button in 'liked' state (disable the button)
     likeButton.disabled = true;
 }
@@ -110,20 +117,13 @@ async function searchGIFs() {
 
     const query = searchBar.value;
 
-    // TODO: 9a - Set up a new URL object to use Giphy search endpoint
     let URL = "https://api.giphy.com/v1/gifs/search?";
-    // TODO: 9b - Set proper query parameters to the newly created URL object
     let api = "api_key=f3UKkR3Pz9pJaQVn9TLrKbxG5YxwYQev";
     let searchValue = "&q=" + query;
     let limit = "&limit=24";
     const finalUrl = URL + api + searchValue + limit;
 
     try {
-        
-        // TODO: 9c - Fetch GIFs from Giphy Search endpoint
-        // TODO: 9d - If response is not valid, return
-        // TODO: 9e - Convert Giphy response to json
-        // TODO: 9f - Use 'response.data' in the constant 'gifs' instead of an empty array
 
         fetch(finalUrl).then( (response) => {
             return response.json(); 
@@ -131,11 +131,7 @@ async function searchGIFs() {
         .then((response) => {            
             const gifs = response.data; // replace array by data
             const db = window.db;
-            
-            // TODO: 9l - Open IndexedDB's database
-            // TODO: 9m - Get GIF from IndexedDB's database, by its ID
-            // TODO: 9n - Create a boolean `isSaved` to check if the GIF was already saved
-            // TODO: 9g - Call the function buildGIFCard with proper parameters 
+        
             db.open();
             // Display every GIF
             gifs.forEach(async gif => {
@@ -156,7 +152,6 @@ async function searchGIFs() {
         
         
     } catch (e) {
-        // TODO: 9h - Display a message in console in case of error
         console.log("An error has occured when retrieving gifs "+ e );
     } finally {
         setLoading(false);

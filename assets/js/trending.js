@@ -19,28 +19,31 @@ function addGIFToFavorite(event) {
 
     const gifTitle = gifElement.querySelector('div h3').textContent;
     const gifVideoUrl = gifElement.querySelector('source').src;
-    const gifImageUrl = gifElement.querySelector('img').src;
+    // const gifImageUrl = gifElement.querySelector('img').src; Ne fonctionne pas obligé de modifier cette ligne
+    const gifImageUrl = gifElement.querySelector('img').dataset.src;
 
     const db = window.db;
-
-    // TODO: 4a - Open IndexedDB's database
     db.open();
-    
-    // TODO: 4b - Save GIF data into IndexedDB's database
     let jsonGif = {
         id: gifId,
         title: gifTitle,
         imageUrl: gifImageUrl,
         videoUrl: gifVideoUrl
     }
+    
     db.gifs.add(jsonGif);
-    // TODO: 4c - Put GIF media (image and video) into a cache named "gif-images"
 
+    const cacheName = "gif-images";
+    caches
+    .open(cacheName)
+    .then( cache => {
+        cache.add(gifVideoUrl);
+        cache.add(gifImageUrl);
+    })
     // Set button in 'liked' state (disable the button)
     likeButton.disabled = true;
 }
 function buildGIFCard(gifItem, isSaved) {
-
    // Create GIF Card element
     const newGifElement = document.createElement("article");
     newGifElement.classList.add("gif-card");
@@ -61,6 +64,7 @@ function buildGIFCard(gifItem, isSaved) {
     const imageSourceElement = document.createElement('img');
     imageSourceElement.classList.add('lazyload');
     imageSourceElement.dataset.src = gifItem.images.original.webp;
+    
     imageSourceElement.alt = `${gifItem.title} image`;
     gifImageElement.appendChild(imageSourceElement);
 
@@ -100,19 +104,11 @@ function buildGIFCard(gifItem, isSaved) {
 window.addEventListener("DOMContentLoaded", async function () {
     setLoading(true);
 
-    // TODO: 1a - Set up a new URL object to use Giphy trending endpoint
-    let URL = "https://api.giphy.com/v1/gifs/trending";
-    // TODO: 1b - Set proper query parameters to the newly created URL object
-    let api = "?api_key=f3UKkR3Pz9pJaQVn9TLrKbxG5YxwYQev";
+    let URL = "https://api.giphy.com/v1/gifs/trending?";
+    let api = "api_key=f3UKkR3Pz9pJaQVn9TLrKbxG5YxwYQev";
     let limit = "&limit=24";
     const finalUrl = URL + api + limit;
     try {
-        // TODO: 1c - Fetch GIFs from Giphy Trending endpoint
-        // TODO: 1d - If response is not valid, return   
-        // TODO: 1e - Convert Giphy response to json
-        // TODO: 1f - Use 'response.data' in the constant 'gifs' instead of an empty array
-        // TODO: 1g - Call the function buildGIFCard with proper parameters                
-        // TIP: Use the boolean `isSaved`
         fetch(URL+api+limit).then( (response) => {
             return response.json(); 
         })             
@@ -120,12 +116,10 @@ window.addEventListener("DOMContentLoaded", async function () {
             const gifs = response.data; // replace array by data
             const db = window.db;
             
-            // TODO: 4d - Open IndexedDB's database
             db.open();
             // Display every GIF
             gifs.forEach(async gif => {
-                let isSaved = false;
-                // TODO: 4e - Get GIF from IndexedDB's database, by its ID                            
+                let isSaved = false;                        
                 db.gifs.get(gif.id).then( (item) => {
                     if(item){
                         isSaved = true;
@@ -141,7 +135,6 @@ window.addEventListener("DOMContentLoaded", async function () {
         });
         
     } catch (e) {
-        // TODO: 1h - Display a message in console in case of error
         console.log("An error has occured when retrieving gifs "+ e );
     } finally {
         setLoading(false);

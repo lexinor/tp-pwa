@@ -7,10 +7,7 @@ function removeGIFFromFavorite(event) {
     const gifImageUrl = gifElement.querySelector('img').src;
 
     const db = window.db;
-
-    // TODO: 6a - Open IndexedDB's database
     db.open();
-    // TODO: 6b - Remove GIF from local database using its ID
     db.gifs.delete(gifId);
     // TODO: 6c - Remove GIF media (image and video) from cache
 
@@ -74,8 +71,6 @@ function buildGIFCard(gifItem) {
 
 window.addEventListener("DOMContentLoaded", async function () {
     const db = window.db;
-
-    // TODO: 5a - Open IndexedDB's database
     db.open();
     // TODO: 5b - Fetch saved GIFs from local database and display them (use function buildGIFCard)
     db.gifs.toArray( (gifs) => {

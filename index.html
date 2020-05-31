@@ -164,10 +164,7 @@
     <!-- Deferred scripts -->
     <script src="/assets/js/dexie.min.js"></script>
     <script>
-        // TODO: 4a - Declare a new local database using Dexie named 'ILoveGifs' (case-sensitive)
         window.db = new Dexie("ILoveGifs"); // Replace null here by new database objedt
-
-        // TODO: 4b - Declare a table named 'gifs' that stores the following columns: 'id', 'title', 'imageUrl', 'videoUrl'
         window.db.version(1).stores({
             gifs: "id, title, imageUrl, videoUrl"
         });
