@@ -16,7 +16,23 @@
     ],
     "start_url": "/?source=pwa",
     "background_color": "#3367D6",
+    "orientation": "portrait mode",
     "display": "standalone",
     "scope": "/",
-    "theme_color": "#6e6e6e"
+    "theme_color": "#6e6e6e",
+    "shortcuts": [
+        {
+            "name": "My favourite Gifs",
+            "short_name": "My fav's",
+            "description": "Take a look at your favourite gifs",
+            "url": "/saved?source=pwa",
+            "icons": [{ "src": "/assets/images/icon-192x192.png", "sizes": "192x192" }]
+        },
+        {
+            "name": "Search a Gif",
+            "short_name": "Search",
+            "description": "Search your gifs",
+            "url": "/search?source=pwa",
+            "icons": [{ "src": "/assets/images/icon-192x192.png", "sizes": "192x192" }]
+            }]
     }

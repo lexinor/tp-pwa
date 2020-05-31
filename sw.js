@@ -5,6 +5,8 @@ const appShellCacheName = 'app-shell-v1';
 const appShellFilesToCache = [
     '/',
     'index.html',
+    '/assets/images/icon-192x192.png',
+    '/assets/images/icon-512x512.png',
     '/assets/css/desktop.css',
     '/assets/css/fonts.css',
     '/assets/css/mobile.css',
