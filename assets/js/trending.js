@@ -25,13 +25,14 @@ function addGIFToFavorite(event) {
 
     // TODO: 4a - Open IndexedDB's database
     db.open();
+    
+    // TODO: 4b - Save GIF data into IndexedDB's database
     let jsonGif = {
         id: gifId,
         title: gifTitle,
         imageUrl: gifImageUrl,
         videoUrl: gifVideoUrl
     }
-    // TODO: 4b - Save GIF data into IndexedDB's database
     db.gifs.add(jsonGif);
     // TODO: 4c - Put GIF media (image and video) into a cache named "gif-images"
 
@@ -104,7 +105,7 @@ window.addEventListener("DOMContentLoaded", async function () {
     // TODO: 1b - Set proper query parameters to the newly created URL object
     let api = "?api_key=f3UKkR3Pz9pJaQVn9TLrKbxG5YxwYQev";
     let limit = "&limit=24";
-
+    const finalUrl = URL + api + limit;
     try {
         // TODO: 1c - Fetch GIFs from Giphy Trending endpoint
         // TODO: 1d - If response is not valid, return   
