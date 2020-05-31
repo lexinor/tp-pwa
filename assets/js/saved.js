@@ -4,13 +4,19 @@ function removeGIFFromFavorite(event) {
 
     const gifElement = document.getElementById(gifId);
     const gifVideoUrl = gifElement.querySelector('source').src;
-    const gifImageUrl = gifElement.querySelector('img').src;
+    // const gifImageUrl = gifElement.querySelector('img').src; Ne fonctionne pas obligé de modifier cette ligne
+    const gifImageUrl = gifElement.querySelector('img').dataset.src;
 
     const db = window.db;
     db.open();
     db.gifs.delete(gifId);
-    // TODO: 6c - Remove GIF media (image and video) from cache
-
+    
+    const cacheName = "gif-images";
+    caches.open(cacheName)
+    .then( cache => {
+        cache.delete(gifVideoUrl);
+        cache.delete(gifImageUrl);
+    })
     // Remove GIF element
     const articlesContainerElement = document.getElementById("gifs");
     articlesContainerElement.removeChild(gifElement);
@@ -72,10 +78,8 @@ function buildGIFCard(gifItem) {
 window.addEventListener("DOMContentLoaded", async function () {
     const db = window.db;
     db.open();
-    // TODO: 5b - Fetch saved GIFs from local database and display them (use function buildGIFCard)
     db.gifs.toArray( (gifs) => {
         gifs.forEach(gif => {
-            console.log(gif);
             buildGIFCard(gif, true);        
         });
     });
