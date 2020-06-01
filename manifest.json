@@ -34,5 +34,5 @@
             "description": "Search your gifs",
             "url": "/search?source=pwa",
             "icons": [{ "src": "/assets/images/icon-192x192.png", "sizes": "192x192" }]
-            }]
+        }]
     }
